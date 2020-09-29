@@ -21,7 +21,7 @@ class CustomDocument extends Document {
   }
   render() {
     return (
-      <Html lang="en">
+      <Html lang="js">
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
