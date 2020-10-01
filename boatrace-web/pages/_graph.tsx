@@ -1,7 +1,6 @@
 import React from 'react';
 import { LineChart,ResponsiveContainer, Line, XAxis, CartesianGrid, Legend, YAxis } from "recharts";
 
-
 export const Graph = () => {
   const data = [
     {name: '9/11', 収益: +4000},
