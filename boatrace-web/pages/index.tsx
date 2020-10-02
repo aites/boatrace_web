@@ -1,5 +1,7 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import {Graph} from './_graph'
+
 
 export default function Home() {
   return (
@@ -9,6 +11,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="title">ボートレース集計</h1>
+      <menu className="menu">
+        <Link href="/posts/forecast"><a>過去結果から予測する</a></Link>
+      </menu>
       <p className="description">最近のレース結果</p>
       <div className="graph">
         <Graph></Graph>
