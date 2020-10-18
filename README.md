@@ -13,8 +13,15 @@ boatrace_web/server/prisma/.env
 server/.env.example
 も変更する
 
+マイグレートする
+cd server
+yarn dev:prisma
+
 ③起動
 yarn dev
+
+
+
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).

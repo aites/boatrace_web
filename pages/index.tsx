@@ -1,98 +1,101 @@
 import Head from 'next/head'
-import { useCallback, useState, FormEvent, ChangeEvent } from 'react'
-import useAspidaSWR from '@aspida/swr'
-import styles from '~/styles/Home.module.css'
-import { apiClient } from '~/utils/apiClient'
-import { Task } from '$/types'
-import UserBanner from '~/components/UserBanner'
+import Link from 'next/link'
+import { Graph } from './parts/_graph'
 
 const Home = () => {
-  const { data: tasks, error, mutate: setTasks } = useAspidaSWR(apiClient.tasks)
-  const [label, setLabel] = useState('')
-  const inputLavel = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value),
-    []
-  )
-
-  const createTask = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
-      if (!label) return
-
-      await apiClient.tasks.post({ body: { label } })
-      setLabel('')
-      setTasks(await apiClient.tasks.$get())
-    },
-    [label]
-  )
-
-  const toggleDone = useCallback(async (task: Task) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } })
-    setTasks(await apiClient.tasks.$get())
-  }, [])
-
-  const deleteTask = useCallback(async (task: Task) => {
-    await apiClient.tasks._taskId(task.id).delete()
-    setTasks(await apiClient.tasks.$get())
-  }, [])
-
-  if (error) return <div>failed to load</div>
-  if (!tasks) return <div>loading...</div>
-
   return (
-    <div className={styles.container}>
+    <div className="container">
       <Head>
-        <title>frourio-todo-app</title>
+        <title>ボートレース集計</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <h1 className="title">ボートレース集計</h1>
+      <menu className="menu">
+        <Link href="./result">
+          <p className="link">過去結果詳細を見る</p>
+        </Link>
+      </menu>
+      <p className="description">最近のレース結果</p>
+      <div className="graph">
+        <Graph></Graph>
+      </div>
+      <footer>triple-i presents</footer>
 
-      <main className={styles.main}>
-        <UserBanner />
+      <style jsx>{`
+        .container {
+          padding: 0 8px;
+        }
+        .graph {
+          height: 600px;
+        }
+        .link {
+          text-decoration: underline !important;
+          cursor: pointer;
+        }
 
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        footer {
+          width: 100%;
+          height: 100px;
+          border-top: 1px solid #eaeaea;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
-        <p className={styles.description}>frourio-todo-app</p>
+        footer img {
+          margin-left: 0.5rem;
+        }
 
-        <div>
-          <form style={{ textAlign: 'center' }} onSubmit={createTask}>
-            <input value={label} type="text" onChange={inputLavel} />
-            <input type="submit" value="ADD" />
-          </form>
-          <ul className={styles.tasks}>
-            {tasks.map((task) => (
-              <li key={task.id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={task.done}
-                    onChange={() => toggleDone(task)}
-                  />
-                  <span>{task.label}</span>
-                </label>
-                <input
-                  type="button"
-                  value="DELETE"
-                  style={{ float: 'right' }}
-                  onClick={() => deleteTask(task)}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </main>
+        footer a {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .title {
+          margin: 8px;
+          font-size: 22px;
+        }
+
+        .description {
+          text-align: center;
+        }
+
+        .description {
+          line-height: 1.5;
+          font-size: 1.5rem;
+        }
+
+        code {
+          background: #fafafa;
+          border-radius: 5px;
+          padding: 0.75rem;
+          font-size: 1.1rem;
+          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+        }
+      `}</style>
+
+      <style jsx global>{`
+        html,
+        body {
+          height: 100%;
+          padding: 0;
+          margin: 0 12px;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+            sans-serif;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+      `}</style>
     </div>
   )
 }
