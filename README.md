@@ -10,6 +10,9 @@ yarn
 ここのデータベース設定を変更する
 boatrace_web/server/prisma/.env
 
+server/.env.example
+も変更する
+
 ③起動
 yarn dev
 
