@@ -14,6 +14,9 @@ const Home = () => {
         <Link href="./result">
           <p className="link">過去結果詳細を見る</p>
         </Link>
+        <Link href="./expected">
+          <p className="link">過去のデータから予測する</p>
+        </Link>
       </menu>
       <p className="description">最近のレース結果</p>
       <div className="graph">
