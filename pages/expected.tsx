@@ -62,6 +62,8 @@ const cocomo_method = () => {
 
 export default function Result() {
   const [price, setPrice] = useState(0)
+  const [plan, setPlan] = useState('lte4x')
+  const [rule, setRule] = useState('cocomo')
   return (
     <div className="result">
       <h1>過去の結果から予測</h1>
@@ -93,19 +95,27 @@ export default function Result() {
         </div>
         <div className="setting_cell">
           <span className="setting_title">買い方</span>
-          <select name="odds_buy">
-            <option value="1">4倍以下買い</option>
-            <option value="2">6倍以下買い</option>
+          <select
+            value={plan}
+            name="odds_buy"
+            onChange={(e) => setPlan(e.target.value)}
+          >
+            <option value="lte4x">4倍以下買い</option>
+            <option value="lte6x">6倍以下買い</option>
             <option value="3">未定</option>
             <option value="4">未定</option>
           </select>
         </div>
         <div className="setting_cell">
           <span className="setting_title">掛け方</span>
-          <select name="method_buy">
-            <option value="1">ココモ法</option>
-            <option value="3">マーチンゲール法</option>
-            <option value="2">ローリスク・ローリターン</option>
+          <select
+            name="method_buy"
+            value={rule}
+            onChange={(e) => setRule(e.target.value)}
+          >
+            <option value="cocomo">ココモ法</option>
+            <option value="martingale">マーチンゲール法</option>
+            <option value="3">ローリスク・ローリターン</option>
             <option value="4">未定</option>
           </select>
         </div>
@@ -121,19 +131,27 @@ export default function Result() {
           <div>損益</div>
           <div>所持金</div>
         </div>
-        <ResultArea price={price} />
+        <ResultArea price={price} plan={plan} rule={rule} />
       </div>
       <style jsx>{styles}</style>
     </div>
   )
 }
 
-function ResultArea({ price }: { price: number }) {
+function ResultArea({
+  price,
+  plan,
+  rule
+}: {
+  price: number
+  plan: string
+  rule: string
+}) {
   const { data } = useAspidaSWR(apiClient.expected, {
     query: {
       price: price,
-      plan: 'lte4x',
-      rule: 'cocomo'
+      plan: plan,
+      rule: rule
     }
   })
   const results = data?.results || []
