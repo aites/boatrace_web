@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { apiClient } from '~/utils/apiClient'
+import useAspidaSWR from '@aspida/swr'
 
 const money = []
 const odds = []
@@ -24,6 +26,13 @@ const cocomo_method = () => {
 }
 
 export default function Result() {
+  const { data } = useAspidaSWR(apiClient.expected, {
+    query: {
+      plan: 'lte4x',
+      rule: 'cocomo'
+    }
+  })
+  const results = data?.results || []
   return (
     <div className="result">
       <h1>過去の結果から予測</h1>
@@ -77,20 +86,15 @@ export default function Result() {
           <div>損益</div>
           <div>所持金</div>
         </div>
-        <div className="row">
-          <div>2020/10/11</div>
-          <div>住之江10R</div>
-          <div>100</div>
-          <div>+560</div>
-          <div>1000</div>
-        </div>
-        <div className="row">
-          <div>2020/10/11</div>
-          <div>住之江11R</div>
-          <div>100</div>
-          <div>+560</div>
-          <div>1000</div>
-        </div>
+        {results.map((result) => (
+          <div className="row">
+            <div>{new Date(result.date).toLocaleDateString()}</div>
+            <div>{result.kaijyo}</div>
+            <div>{result.price}</div>
+            <div>{result.plusminus}</div>
+            <div>{result.credit}</div>
+          </div>
+        ))}
       </div>
       <style jsx>{`
         .result {
