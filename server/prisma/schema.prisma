@@ -72,7 +72,11 @@ model buydata {
   price     Int?
   isbuy     Boolean? @default(false)
   buystatus String?
+  isChecked Boolean? @default(false)
+  jyomst    jyomst   @relation(fields: [jyoCode], references: [code])
+  raceinfo  raceinfo @relation(fields: [racedate, jyoCode, raceNo], references: [racedate, jyoCode, raceNo])
 
+  @@index([jyoCode], name: "jyoCode")
   @@index([racedate, jyoCode, raceNo], name: "racedate")
 }
 
@@ -105,6 +109,7 @@ model raceresult {
   raceNo        String
   santankumiban String
   santanodds    Float?
+  raceinfo      raceinfo @relation(fields: [racedate, jyoCode, raceNo], references: [racedate, jyoCode, raceNo])
 
   @@id([racedate, jyoCode, raceNo])
 }
