@@ -1,9 +1,44 @@
 import React, { Component, useState } from 'react'
 import { apiClient } from '~/utils/apiClient'
 import useAspidaSWR from '@aspida/swr'
+import css from 'styled-jsx/css'
 
 const money = []
 const odds = []
+
+const styles = css`
+  .result {
+    margin: 0 12px;
+  }
+  .setting{
+    border: 1px solid #333;
+    padding: 8px;
+  }
+  .setting_title{
+    margin-right: 8px;
+  }
+  .money_possession {
+    padding: 0 2px;
+    font-size: 16px;
+  }
+  .setting_cell{
+    margin-bottom 8px;
+  }
+  .grid-table {
+    width: 100%;
+    margin 0 20px;
+    display: grid;
+    grid-template-columns:
+      calc(100vw * 0.2)
+      calc(100vw * 0.2)
+      calc(100vw * 0.2)
+      calc(100vw * 0.2)
+      calc(100vw * 0.1);
+  }
+  .grid-table > div {
+    display: contents;
+  }
+`
 
 const send_api = () => {
   console.log('データベースの値取得')
@@ -88,39 +123,7 @@ export default function Result() {
         </div>
         <ResultArea price={price} />
       </div>
-      <style jsx>{`
-        .result {
-          margin: 0 12px;
-        }
-        .setting{
-          border: 1px solid #333;
-          padding: 8px;
-        }
-        .setting_title{
-          margin-right: 8px;
-        }
-        .money_possession {
-          padding: 0 2px;
-          font-size: 16px;
-        }
-        .setting_cell{
-          margin-bottom 8px;
-        }
-        .grid-table {
-          width: 100%;
-          margin 0 20px;
-          display: grid;
-          grid-template-columns:
-            calc(100vw * 0.2)
-            calc(100vw * 0.2)
-            calc(100vw * 0.2)
-            calc(100vw * 0.2)
-            calc(100vw * 0.1);
-        }
-        .grid-table > .row {
-          display: contents;
-        }
-      `}</style>
+      <style jsx>{styles}</style>
     </div>
   )
 }
@@ -146,6 +149,7 @@ function ResultArea({ price }: { price: number }) {
           <div>{result.credit}</div>
         </div>
       ))}
+      <style jsx>{styles}</style>
     </>
   )
 }
