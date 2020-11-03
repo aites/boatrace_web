@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { apiClient } from '~/utils/apiClient'
 import useAspidaSWR from '@aspida/swr'
 
@@ -26,13 +26,7 @@ const cocomo_method = () => {
 }
 
 export default function Result() {
-  const { data } = useAspidaSWR(apiClient.expected, {
-    query: {
-      plan: 'lte4x',
-      rule: 'cocomo'
-    }
-  })
-  const results = data?.results || []
+  const [price, setPrice] = useState(0)
   return (
     <div className="result">
       <h1>過去の結果から予測</h1>
@@ -40,7 +34,13 @@ export default function Result() {
       <form className="setting" onSubmit={handleSubmit}>
         <div className="setting_cell">
           <span className="setting_title">所持金</span>
-          <input name="money" type="number" value="120000" />円
+          <input
+            name="money"
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(parseInt(e.target.value))}
+          />
+          円
         </div>
         <div className="setting_cell">
           損切
@@ -86,15 +86,7 @@ export default function Result() {
           <div>損益</div>
           <div>所持金</div>
         </div>
-        {results.map((result) => (
-          <div className="row">
-            <div>{new Date(result.date).toLocaleDateString()}</div>
-            <div>{result.kaijyo}</div>
-            <div>{result.price}</div>
-            <div>{result.plusminus}</div>
-            <div>{result.credit}</div>
-          </div>
-        ))}
+        <ResultArea price={price} />
       </div>
       <style jsx>{`
         .result {
@@ -130,5 +122,30 @@ export default function Result() {
         }
       `}</style>
     </div>
+  )
+}
+
+function ResultArea({ price }: { price: number }) {
+  const { data } = useAspidaSWR(apiClient.expected, {
+    query: {
+      price: price,
+      plan: 'lte4x',
+      rule: 'cocomo'
+    }
+  })
+  const results = data?.results || []
+
+  return (
+    <>
+      {results.map((result, i) => (
+        <div className="row" key={`key_${i}`}>
+          <div>{new Date(result.date).toLocaleDateString()}</div>
+          <div>{result.kaijyo}</div>
+          <div>{result.price}</div>
+          <div>{result.plusminus}</div>
+          <div>{result.credit}</div>
+        </div>
+      ))}
+    </>
   )
 }

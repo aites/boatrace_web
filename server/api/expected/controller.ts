@@ -3,7 +3,7 @@ import { getExpectedData } from '$/service/expected'
 
 export default defineController(() => ({
   get: async ({ query }) => {
-    const results = await getExpectedData({})
+    const results = await getExpectedData(query)
     return {
       status: 200,
       body: {
