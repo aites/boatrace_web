@@ -4,8 +4,8 @@ export type Methods = {
   get: {
     query: {
       price: number
-      plan: string
-      rule: string
+      plan: 'lte4x' | 'lte6x'
+      rule: 'martingale' | 'cocomo'
     }
     resBody: {
       results: ExpectedData[]
